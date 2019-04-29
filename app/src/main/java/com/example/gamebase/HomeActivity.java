@@ -17,10 +17,28 @@ public class HomeActivity extends AppCompatActivity {
         setSupportActionBar(bar);
 
     }
+
     public void goToSearch(View view){
         Intent intent = new Intent(HomeActivity.this, SearchActivity.class);
         startActivity(intent);
 
     }
+    public void goToNewsFeed(View view){
+        Intent intent = new Intent(HomeActivity.this, NewsFeedActivity.class);
+        startActivity(intent);
+    }
+    public void goToBrowse(View view){
+        Intent intent = new Intent(HomeActivity.this, BrowseActivity.class);
+        startActivity(intent);
+    }
+    public void goToSettings(View view){
+        Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+        startActivity(intent);
+    }
+    public void goToHelp(View view){
+        Intent intent = new Intent(HomeActivity.this, HelpActivity.class);
+        startActivity(intent);
+    }
 
 }
+
