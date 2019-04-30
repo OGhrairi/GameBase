@@ -8,15 +8,26 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = "top50_table")
 public class GameTitle {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey()
     private int id;
+
+    @ColumnInfo (name = "game_title")
     @NonNull
-    @ColumnInfo(name = "Title")
     private String title;
-    public GameTitle(@NonNull String gameTitle){
-        this.title=gameTitle;
+
+
+    public int getId(){
+        return this.id;
     }
-    public String getTitle(){
+    public void setId(int id){
+        this.id = id;
+    }
+
+
+    public String getTitle() {
         return this.title;
+    }
+    public void setTitle(String title){
+        this.title = title;
     }
 }

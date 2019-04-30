@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.view.View;
 import androidx.appcompat.widget.Toolbar;
 
+import java.util.ArrayList;
+
 public class HomeActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -15,7 +18,6 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Toolbar bar = (Toolbar) findViewById(R.id.homeToolbar);
         setSupportActionBar(bar);
-
     }
 
     public void goToSearch(View view){
