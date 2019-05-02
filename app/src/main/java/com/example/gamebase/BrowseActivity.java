@@ -4,11 +4,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,12 +25,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class BrowseActivity extends AppCompatActivity {
+public class BrowseActivity extends AppCompatActivity implements BrowseAdapter.OnBrowseListener{
+
+    @Override
+    public void onBrowseClick(int position) {
+        //position starts at 0
+
+        Intent intent = new Intent(this,GameInfoActivity.class);
+        intent.putExtra("id",position+1);
+        startActivity(intent);
+    }
+    public void pageSwitcher(String[] data){
+        adapter = new BrowseAdapter(data,this);
+        recyclerView.setAdapter(adapter);
+    }
+
+    //custom datatype used in storing data from the api to the local database
+    public class gameCombo{
+        private int id;
+        private String name;
+        public gameCombo(int id, String name){
+            this.id=id;
+            this.name=name;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+    }
+
     ArrayList<String> list = new ArrayList<>();
     //define the variables to create the recyclerview
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +79,7 @@ public class BrowseActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         //run async task with arg 1, which just retrieves the list from the room db and displays on
         //recycler view
-        AsyncGetter a = new AsyncGetter();
+        AsyncGetter a = new AsyncGetter(this);
         a.execute(1);
 
     }
@@ -57,7 +94,7 @@ public class BrowseActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        AsyncGetter a = new AsyncGetter();
+        AsyncGetter a = new AsyncGetter(this);
         if(id == R.id.browseMenuRefresh){
 
             a.execute(0);
@@ -69,7 +106,10 @@ public class BrowseActivity extends AppCompatActivity {
 
     //Async class which handles all interaction with the database and the api server
     public class AsyncGetter extends AsyncTask<Integer,Integer,List<GameTitle>>{
-
+        private Context mContext;
+        public AsyncGetter(Context context){
+            mContext=context;
+        }
         @Override
         protected List<GameTitle> doInBackground(Integer... inputArg) {
             //if input 0, clears table and repopulates with fresh data from server
@@ -77,15 +117,16 @@ public class BrowseActivity extends AppCompatActivity {
                 //let user know it is refreshing data
                 publishProgress(0);
                 //retrieve fresh list by calling the GET() function, which handles http stuff
-                List<String> titleList = GET();
+                List<gameCombo> titleList = GET();
                 int length = titleList.size();
                 //clear table
                 GameDatabase.getGameDatabase(getApplicationContext()).gameDao().deleteAllGames();
                 //repopulate table
                 for (int i = 0; i < length; i++) {
                     GameTitle title = new GameTitle();
-                    title.setTitle(titleList.get(i));
+                    title.setTitle(titleList.get(i).getName());
                     title.setId(i + 1);
+                    title.setIgdbId(titleList.get(i).getId());
                     GameDatabase.getGameDatabase(getApplicationContext()).gameDao().insertGame(title);
                 }
                 //publishProgress(1);
@@ -111,15 +152,15 @@ public class BrowseActivity extends AppCompatActivity {
             int length = titles.size();
             String[] myDataset = new String[length];
             for (int i = 0; i < (length); i++) {
-                myDataset[i] = titles.get(i).getTitle() + " id: " + titles.get(i).getId();
+                myDataset[i] = titles.get(i).getTitle() + " id: " + titles.get(i).getIgdbId();
             }
-            adapter = new BrowseAdapter(myDataset);
-            recyclerView.setAdapter(adapter);
+            pageSwitcher(myDataset);
+
         }
         //method which handles all web stuff on this activity
         //no input args, and returns an array of top 50 game titles
-        private List<String> GET() {
-            List<String> results = new ArrayList<>();
+        private List<gameCombo> GET() {
+            List<gameCombo> results = new ArrayList<>();
             String API_KEY = "54b585e574a2d3fc29465538bc878c87";
             InputStream is = null;
             HttpURLConnection httpURLConnection = null;
@@ -132,7 +173,7 @@ public class BrowseActivity extends AppCompatActivity {
                 httpURLConnection.setRequestProperty("user-key", API_KEY);
                 httpURLConnection.setRequestProperty("Content-Type", "application/json");
                 //body text - string is converted to byte, passed to the outputStream
-                String str = "fields name; sort total_rating desc; where total_rating != null; limit 50;";
+                String str = "fields name, id; sort popularity desc; limit 50;";
                 byte[] outputBytes = str.getBytes();
                 OutputStream os = httpURLConnection.getOutputStream();
                 os.write(outputBytes);
@@ -169,24 +210,30 @@ public class BrowseActivity extends AppCompatActivity {
             }
             return results;
         }
-        //interprets the objects within the json array
-        public String readMessage (JsonReader reader) throws IOException{
+        //interprets the objects within the json array, returns gameCombo, custom datatype which
+        //houses a string and an int, in this case for each game's name and IGDB id number
+        public gameCombo readMessage (JsonReader reader) throws IOException{
             String name="";
+            int id=0;
             reader.beginObject();
             //if it's the game name, save it. if it's anything else, ignore
             while(reader.hasNext()){
-                String n = reader.nextName();
-                if(n.equals("name")){
-                    name = reader.nextString();
-                }else {
-                    reader.skipValue();
+                switch(reader.nextName()){
+                    case "id":
+                       id=reader.nextInt();
+                        break;
+                    case "name":
+                        name=reader.nextString();
+                        break;
+                    default:
+                        reader.skipValue();
+                        break;
                 }
             }
             reader.endObject();
-            return name;
+            gameCombo combo = new gameCombo(id,name);
+            return combo;
         }
 
-
     }
-
 }

@@ -13,23 +13,34 @@ import java.util.List;
 public class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.BrowseViewHolder> {
     private String[] list;
     private List<GameTitle> titles;
-    public static class BrowseViewHolder extends RecyclerView.ViewHolder{
+    private OnBrowseListener mOnBrowseListener;
+    public BrowseAdapter(String[] inList, OnBrowseListener OnBrowseListener){
+        list=inList;
+        this.mOnBrowseListener = OnBrowseListener;
+    }
+
+    public static class BrowseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView txt;
         public LinearLayout layout;
-        public BrowseViewHolder(@NonNull View itemView) {
+        OnBrowseListener onBrowseListener;
+        public BrowseViewHolder(@NonNull View itemView, OnBrowseListener onBrowseListener) {
             super(itemView);
             txt = itemView.findViewById(R.id.textView);
+            this.onBrowseListener=onBrowseListener;
+            itemView.setOnClickListener(this);
         }
-    }
-    public BrowseAdapter(String[] inList){
-        list=inList;
+
+        @Override
+        public void onClick(View v) {
+            onBrowseListener.onBrowseClick(getAdapterPosition());
+        }
     }
 
     @NonNull
     @Override
     public BrowseViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.browse_listitem, parent, false);
-        BrowseViewHolder holder = new BrowseViewHolder(v);
+        BrowseViewHolder holder = new BrowseViewHolder(v, mOnBrowseListener);
         return holder;
     }
 
@@ -46,5 +57,8 @@ public class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.BrowseView
     public void setData(List<GameTitle> newData){
         this.titles = newData;
         notifyDataSetChanged();
+    }
+    public interface OnBrowseListener{
+        void onBrowseClick(int position);
     }
 }

@@ -15,6 +15,9 @@ public class GameTitle {
     @NonNull
     private String title;
 
+    @ColumnInfo (name = "igdb_id")
+    @NonNull
+    private int igdbId;
 
     public int getId(){
         return this.id;
@@ -30,4 +33,7 @@ public class GameTitle {
     public void setTitle(String title){
         this.title = title;
     }
+
+    public int getIgdbId(){return this.igdbId;}
+    public void setIgdbId(int id){this.igdbId = id;}
 }

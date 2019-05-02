@@ -2,7 +2,19 @@
 <menu xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <Button
+        android:id="@+id/browseRefreshButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@color/Azure"
+        android:onClick="Refresher"
+        android:text="Refresh"
+        app:layout_constraintBottom_toBottomOf="@+id/browseToolbar"
+        app:layout_constraintEnd_toEndOf="@+id/browseToolbar"
+        app:layout_constraintTop_toTopOf="@+id/browseToolbar" />
     <item
         android:id="@+id/browseMenuRefresh"
-        android:title="Refresh" />
+        android:title="Refresh"
+        app:showAsAction="ifRoom" />
 </menu>

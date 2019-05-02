@@ -25,4 +25,6 @@ public interface GameDao {
     @Query("DELETE FROM top50_table")
     void deleteAllGames();
 
+    @Query("SELECT igdb_id FROM top50_table where id = :idIn")
+    int getGame(int idIn);
 }
