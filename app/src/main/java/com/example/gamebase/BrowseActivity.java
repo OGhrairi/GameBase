@@ -193,7 +193,8 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
                 httpURLConnection.setRequestProperty("user-key", API_KEY);
                 httpURLConnection.setRequestProperty("Content-Type", "application/json");
                 //body text - string is converted to byte, passed to the outputStream
-                String str = "fields name, id; sort popularity desc; limit 50;";
+                String str = "fields name, id; sort total_rating desc; where total_rating_count > 50; limit 50;";
+                str = "fields name,rating; where rating_count > 100 & category = 0 & version_parent = null; limit 50; sort rating desc;";
                 byte[] outputBytes = str.getBytes();
                 OutputStream os = httpURLConnection.getOutputStream();
                 os.write(outputBytes);
