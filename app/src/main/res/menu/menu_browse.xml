@@ -15,6 +15,7 @@
         app:layout_constraintTop_toTopOf="@+id/browseToolbar" />
     <item
         android:id="@+id/browseMenuRefresh"
+        android:icon="@android:drawable/stat_notify_sync"
         android:title="Refresh"
         app:showAsAction="ifRoom" />
 </menu>

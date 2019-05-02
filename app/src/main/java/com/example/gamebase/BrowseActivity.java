@@ -2,9 +2,9 @@ package com.example.gamebase;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.util.JsonReader;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,15 +25,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class BrowseActivity extends AppCompatActivity implements BrowseAdapter.OnBrowseListener{
+public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBrowseListener{
 
     @Override
     public void onBrowseClick(int position) {
+        //check if using tablet, if so, fragment is inflated on this page, otherwise navigate to
+        //game info dedicated page
         //position starts at 0
-
-        Intent intent = new Intent(this,GameInfoActivity.class);
-        intent.putExtra("id",position+1);
-        startActivity(intent);
+        if(isTab == false) {
+            Intent intent = new Intent(this, GameInfoActivity.class);
+            intent.putExtra("id", position + 1);
+            startActivity(intent);
+        }else{
+            getter g = new getter();
+            g.execute(position+1);
+        }
     }
     public void pageSwitcher(String[] data){
         adapter = new BrowseAdapter(data,this);
@@ -63,7 +69,7 @@ public class BrowseActivity extends AppCompatActivity implements BrowseAdapter.O
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-
+    private boolean isTab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +79,20 @@ public class BrowseActivity extends AppCompatActivity implements BrowseAdapter.O
         setSupportActionBar(childBar);
         //add return arrow
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if( findViewById(R.id.gameInfoFrame) == null){
+            isTab=false;
+        }else{
+            /*However, if the fragment does exist, that means the app is open on a tablet, and so
+            we want to fill the fragment placeholder with the gameInfoFrame.
+            1:create an instance of the fragment
+            2:begin a fragment 'transaction' to replace the placeholder with the instantiated fragment
+            */
+            isTab=true;
+            GameInfoFragment frag = new GameInfoFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.gameInfoFrame,frag);
+            transaction.commit();
+        }
         //bind layout manager to recycler in xml
         recyclerView = (RecyclerView) findViewById(R.id.browseRecycleView);
         layoutManager = new LinearLayoutManager(this);
@@ -235,5 +255,38 @@ public class BrowseActivity extends AppCompatActivity implements BrowseAdapter.O
             return combo;
         }
 
+    }
+
+    //onStop/onStart handlers for maintaining the listview results on screen rotation
+    @Override
+    protected void onStop() {
+        super.onStop();
+        onSaveInstanceState(new Bundle());
+    }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (persist == null) {
+        }else{
+            outState.putStringArray("persist", persist);
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        onRestoreInstanceState(new Bundle());
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        persist=savedInstanceState.getStringArray("persist");
+        if(persist != null) {
+            TextView titleView = findViewById(R.id.gameInfoTitle);
+            titleView.setText(persist[0]);
+            TextView descView = findViewById(R.id.gameInfoDesc);
+            descView.setText(persist[1]);
+        }
     }
 }
