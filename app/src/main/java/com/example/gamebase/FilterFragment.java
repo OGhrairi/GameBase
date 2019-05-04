@@ -47,7 +47,12 @@ public class FilterFragment extends DialogFragment {
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),android.R.layout.simple_spinner_item,testList);
         dataAdapter.setDropDownViewResource(R.layout.spinner_item);
         spinner.setAdapter(dataAdapter);
-        spinner.setAdapter(dataAdapter);
+
+        Spinner spinner1 = (Spinner) view.findViewById(R.id.genreSpinner);
+        spinner1.setAdapter(dataAdapter);
+
+        Spinner spinner2 = (Spinner)view.findViewById(R.id.typeSpinner);
+        spinner2.setAdapter(dataAdapter);
         return builder.create();
     }
 }

@@ -91,6 +91,14 @@
         android:textAlignment="center"
         android:textSize="22sp" />
 
+    <Spinner
+        android:id="@+id/genreSpinner"
+        style="@android:style/Widget.Material.Spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="4dp"
+        android:paddingVertical="8dp" />
+
     <TextView
         android:id="@+id/filterTypeTitle"
         android:layout_width="match_parent"
@@ -98,6 +106,14 @@
         android:text="Type"
         android:textAlignment="center"
         android:textSize="22sp" />
+
+    <Spinner
+        android:id="@+id/typeSpinner"
+        style="@android:style/Widget.Material.Spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="4dp"
+        android:paddingVertical="8dp" />
 
     <LinearLayout
         android:id="@+id/filterButtonLayout"

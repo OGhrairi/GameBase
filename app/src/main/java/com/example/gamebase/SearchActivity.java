@@ -1,16 +1,10 @@
 package com.example.gamebase;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-
 import androidx.appcompat.widget.Toolbar;
-
-import java.util.ArrayList;
-import java.util.List;
+import androidx.fragment.app.FragmentTransaction;
 
 public class SearchActivity extends AppCompatActivity {
 
@@ -21,6 +15,11 @@ public class SearchActivity extends AppCompatActivity {
         Toolbar childBar = (Toolbar) findViewById(R.id.searchToolbar);
         setSupportActionBar(childBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        GameInfoFragment frag = new GameInfoFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        //TODO: create a new fragment/use existing fragment for showing results in the recyclerview used before
+        //transaction.replace(R.id.searchResultsFrame,frag);
+        transaction.commit();
     }
     public void filterExpand(View view){
         FilterFragment frag = new FilterFragment();
