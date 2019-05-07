@@ -12,7 +12,7 @@ import java.util.List;
 
 public class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.BrowseViewHolder> {
     private String[] list;
-    private List<GameTitle> titles;
+    private List<BrowseResultsTable> titles;
     private OnBrowseListener mOnBrowseListener;
     public BrowseAdapter(String[] inList, OnBrowseListener OnBrowseListener){
         list=inList;
@@ -54,7 +54,7 @@ public class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.BrowseView
         return list.length;
     }
 
-    public void setData(List<GameTitle> newData){
+    public void setData(List<BrowseResultsTable> newData){
         this.titles = newData;
         notifyDataSetChanged();
     }

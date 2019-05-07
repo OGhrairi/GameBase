@@ -1,6 +1,5 @@
 package com.example.gamebase;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -125,13 +124,13 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
 
 
     //Async class which handles all interaction with the database and the api server
-    public class AsyncGetter extends AsyncTask<Integer,Integer,List<GameTitle>>{
+    public class AsyncGetter extends AsyncTask<Integer,Integer,List<BrowseResultsTable>>{
         private Context mContext;
         public AsyncGetter(Context context){
             mContext=context;
         }
         @Override
-        protected List<GameTitle> doInBackground(Integer... inputArg) {
+        protected List<BrowseResultsTable> doInBackground(Integer... inputArg) {
             //if input 0, clears table and repopulates with fresh data from server
             if (inputArg[0].equals(0)) {
                 //let user know it is refreshing data
@@ -140,18 +139,18 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
                 List<gameCombo> titleList = GET();
                 int length = titleList.size();
                 //clear table
-                GameDatabase.getGameDatabase(getApplicationContext()).gameDao().deleteAllGames();
+                GameDatabase.getGameDatabase(getApplicationContext()).BrowseDao().deleteAllGames();
                 //repopulate table
                 for (int i = 0; i < length; i++) {
-                    GameTitle title = new GameTitle();
+                    BrowseResultsTable title = new BrowseResultsTable();
                     title.setTitle(titleList.get(i).getName());
                     title.setId(i + 1);
                     title.setIgdbId(titleList.get(i).getId());
-                    GameDatabase.getGameDatabase(getApplicationContext()).gameDao().insertGame(title);
+                    GameDatabase.getGameDatabase(getApplicationContext()).BrowseDao().insertGame(title);
                 }
                 //publishProgress(1);
             }
-            return GameDatabase.getGameDatabase(getApplicationContext()).gameDao().getAllGames();
+            return GameDatabase.getGameDatabase(getApplicationContext()).BrowseDao().getAllGames();
         }
 
         @Override
@@ -167,7 +166,7 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
 
         //onPostExecute is responsible for taking table data and binding it to the recyclerview
         @Override
-        protected void onPostExecute(List<GameTitle> titles) {
+        protected void onPostExecute(List<BrowseResultsTable> titles) {
             super.onPostExecute(titles);
             int length = titles.size();
             String[] myDataset = new String[length];

@@ -6,12 +6,12 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {GameTitle.class}, version = 1)
+@Database(entities = {BrowseResultsTable.class, SearchResultTable.class}, version = 1)
 public abstract class GameDatabase extends RoomDatabase {
 
     private static GameDatabase INSTANCE;
 
-    public abstract GameDao gameDao();
+    public abstract BrowseDao BrowseDao();
 
     public static GameDatabase getGameDatabase (Context context){
         if(INSTANCE == null){

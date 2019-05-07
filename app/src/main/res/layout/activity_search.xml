@@ -37,6 +37,7 @@
         android:id="@+id/buttonSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="searchPress"
         android:text="@string/btnSearchTxt"
         app:layout_constraintBottom_toBottomOf="@+id/searchStringEntry"
         app:layout_constraintEnd_toEndOf="parent"

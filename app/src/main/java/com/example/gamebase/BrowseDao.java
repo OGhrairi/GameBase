@@ -6,21 +6,20 @@ import androidx.room.Insert;
 import androidx.room.Query;
 
 import java.util.List;
-
 @Dao
-public interface GameDao {
+public interface BrowseDao {
 
     @Query("SELECT * FROM top50_table")
-    List<GameTitle> getAllGames();
+    List<BrowseResultsTable> getAllGames();
 
     @Insert
-    void insertGame(GameTitle game);
+    void insertGame(BrowseResultsTable game);
 
     @Insert
-    void insertGames(GameTitle... games);
+    void insertGames(BrowseResultsTable... games);
 
     @Delete
-    void deleteGame(GameTitle game);
+    void deleteGame(BrowseResultsTable game);
 
     @Query("DELETE FROM top50_table")
     void deleteAllGames();

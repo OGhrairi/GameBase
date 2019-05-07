@@ -25,7 +25,7 @@ public abstract class GameInfoSuper extends AppCompatActivity {
         protected String[] doInBackground(Integer... ints) {
             String[] out;
             int id = ints[0];
-            int igdbId = GameDatabase.getGameDatabase(getApplicationContext()).gameDao().getGame(id);
+            int igdbId = GameDatabase.getGameDatabase(getApplicationContext()).BrowseDao().getGame(id);
             out = GET(igdbId);
             return out;
         }

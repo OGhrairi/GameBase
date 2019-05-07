@@ -4,14 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-@Entity(tableName = "top50_table")
-public class GameTitle {
+@Entity(tableName = "search_results_table")
+public class SearchResultTable {
 
     @PrimaryKey()
     private int id;
 
-    @ColumnInfo (name = "game_title")
+    @ColumnInfo(name = "game_title")
     @NonNull
     private String title;
 
