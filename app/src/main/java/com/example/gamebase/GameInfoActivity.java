@@ -14,8 +14,9 @@ public class GameInfoActivity extends GameInfoSuper {
         setSupportActionBar(bar);
         Intent intent = getIntent();
         int message = intent.getIntExtra("id", 0);
+        int tableid = intent.getIntExtra("tableid",0);
         getter g = new getter();
-        g.execute(message);
+        g.execute(message,tableid);
     }
 }
 

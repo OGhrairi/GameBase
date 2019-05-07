@@ -87,10 +87,14 @@
 
         <FrameLayout
             android:id="@+id/tabletSearchResultsFrame"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/searchResultsRecycle"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
         </FrameLayout>
 
     </LinearLayout>

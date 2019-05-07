@@ -19,13 +19,21 @@ public abstract class GameInfoSuper extends AppCompatActivity {
     //abstract class which encompasses common functionality when displaying game info either on
     //its own page, or alongside browse page
     public String[] persist;
+
+    //responsible for retrieving game information when a game is pressed on the recyclerview
     public class getter extends AsyncTask<Integer,Void,String[]> {
 
         @Override
         protected String[] doInBackground(Integer... ints) {
             String[] out;
             int id = ints[0];
-            int igdbId = GameDatabase.getGameDatabase(getApplicationContext()).BrowseDao().getGame(id);
+            int tableNum = ints[1];
+            int igdbId=0;
+            if(tableNum == 0){
+                igdbId = GameDatabase.getGameDatabase(getApplicationContext()).BrowseDao().getGame(id);
+            }else if(tableNum == 1){
+                igdbId = GameDatabase.getGameDatabase(getApplicationContext()).SearchDao().getGame(id);
+            }
             out = GET(igdbId);
             return out;
         }

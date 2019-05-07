@@ -22,12 +22,31 @@ import java.util.List;
 
 
 public class FilterFragment extends DialogFragment {
+    public class platform{
+        private int id;
+        private String name;
+        public platform(int id, String name){
+            this.id=id;
+            this.name=name;
+        }
 
+        public String getName() {
+            return name;
+        }
 
+        public int getId() {
+            return id;
+        }
+    }
+    List<platform> platformList = new ArrayList<>();
     public FilterFragment() {
         // Required empty public constructor
     }
-
+    private void adder(int id, String name){
+        int platformId = id;
+        String platformName = name;
+        platformList.add(new platform(platformId,platformName));
+    }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -37,11 +56,15 @@ public class FilterFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.fragment_filter,null);
         builder.setView(view);
-        List<String> testList = new ArrayList<String>();
-        testList.add("test1");
-        testList.add("test2");
-        testList.add("test3");
-        testList.add("test4");
+        adder(14,"Mac");
+        adder(3, "Linux");
+        adder(6, "PC (Microsoft Windows)");
+        adder(130,"Nintendo Switch");
+        adder(48, "PlayStation 4");
+        adder(49, "Xbox One");
+        adder(9,"PlayStation 3");
+        adder(12, "Xbox 360");
+
 
         Spinner spinner = (Spinner) view.findViewById(R.id.platformSpinner);
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),android.R.layout.simple_spinner_item,testList);

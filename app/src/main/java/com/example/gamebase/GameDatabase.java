@@ -12,6 +12,7 @@ public abstract class GameDatabase extends RoomDatabase {
     private static GameDatabase INSTANCE;
 
     public abstract BrowseDao BrowseDao();
+    public abstract SearchDao SearchDao();
 
     public static GameDatabase getGameDatabase (Context context){
         if(INSTANCE == null){

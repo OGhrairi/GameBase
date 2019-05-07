@@ -37,7 +37,7 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
             startActivity(intent);
         }else{
             getter g = new getter();
-            g.execute(position+1);
+            g.execute(position+1,0);
         }
     }
     public void pageSwitcher(String[] data){
@@ -63,7 +63,6 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
         }
     }
 
-    ArrayList<String> list = new ArrayList<>();
     //define the variables to create the recyclerview
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
