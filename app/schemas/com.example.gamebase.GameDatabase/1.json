@@ -2,10 +2,42 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "566cb09e2432ce9957e6bf55846ab675",
+    "identityHash": "4f2d6b80795c06ba0967210142bcc2a0",
     "entities": [
       {
         "tableName": "top50_table",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `game_title` TEXT NOT NULL, `igdb_id` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "title",
+            "columnName": "game_title",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "igdbId",
+            "columnName": "igdb_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": false
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "search_results_table",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `game_title` TEXT NOT NULL, `igdb_id` INTEGER NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
@@ -39,7 +71,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"566cb09e2432ce9957e6bf55846ab675\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"4f2d6b80795c06ba0967210142bcc2a0\")"
     ]
   }
 }

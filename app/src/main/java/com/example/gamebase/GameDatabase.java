@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {BrowseResultsTable.class, SearchResultTable.class}, version = 1)
+@Database(entities = {BrowseResultsTable.class, SearchResultTable.class, PlatformTable.class}, version = 1)
 public abstract class GameDatabase extends RoomDatabase {
 
     private static GameDatabase INSTANCE;
