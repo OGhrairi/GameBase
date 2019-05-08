@@ -24,4 +24,7 @@ public interface GenreDao {
     @Query("DELETE FROM genre_table")
     void deleteAllGenres();
 
+    @Query("SELECT igdb_id FROM genre_table where genre_name = :platformName")
+    int getGenre(String platformName);
+
 }

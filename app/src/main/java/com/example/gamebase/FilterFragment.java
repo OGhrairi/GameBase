@@ -1,51 +1,32 @@
 package com.example.gamebase;
 
 
+import android.app.Activity;
 import android.app.Dialog;
-
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
-
-import org.angmarch.views.NiceSpinner;
+import android.widget.ProgressBar;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class FilterFragment extends DialogFragment {
-    public class gameCombo {
-        private int id;
-        private String name;
 
-        public gameCombo(int id, String name) {
-            this.id = id;
-            this.name = name;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public String getName() {
-            return name;
-        }
-    }
     List<PlatformTable> platform  = new ArrayList<>();
     List<GenreTable> genre = new ArrayList<>();
-
     List<String>platformList = new ArrayList<>();
     List<String>genreList = new ArrayList<>();
     AutoCompleteTextView autoPlatform;
@@ -64,20 +45,53 @@ public class FilterFragment extends DialogFragment {
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.fragment_filter,null);
         builder.setView(view);
-
+        final EditText yr1 = view.findViewById(R.id.filterYearFrom);
+        final EditText yr2 = view.findViewById(R.id.filterYearTo);
         getter g = new getter();
         g.execute();
         ImageButton clearButton = view.findViewById(R.id.clearButton);
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText yr1 = view.findViewById(R.id.filterYearFrom);
-                EditText yr2 = view.findViewById(R.id.filterYearTo);
+
                 yr1.setText("");
                 yr2.setText("");
+
+            }
+        });
+        Button cancelButton = view.findViewById(R.id.filterCancel);
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dismiss();
             }
         });
 
+        Button applyButton = view.findViewById(R.id.filterApply);
+        applyButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Activity a = getActivity();
+                if(a instanceof SearchActivity){
+                    AutoCompleteTextView platform = view.findViewById(R.id.platformSelector);
+                    AutoCompleteTextView genre = view.findViewById(R.id.genreSelector);
+                    if(!TextUtils.isEmpty(platform.getText().toString())){
+                    ((SearchActivity) a).setPlatformFilter(autoPlatform.getText().toString());
+                    }
+                    if(!TextUtils.isEmpty(genre.getText().toString())) {
+                        ((SearchActivity) a).setGenreFilter(autoGenre.getText().toString());
+                    }
+                    if(!TextUtils.isEmpty(yr1.getText().toString())){
+                        ((SearchActivity) a).setY1Filter(Integer.parseInt(yr1.getText().toString()));
+                    }
+                    if(!TextUtils.isEmpty(yr2.getText().toString())){
+                        ((SearchActivity) a).setY2Filter(Integer.parseInt(yr2.getText().toString()));
+                    }
+                    ((SearchActivity) a).filterUpdate();
+                    dismiss();
+                }
+            }
+        });
 
         return builder.create();
     }

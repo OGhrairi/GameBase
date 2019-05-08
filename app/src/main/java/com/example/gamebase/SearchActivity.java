@@ -51,7 +51,53 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
             return name;
         }
     }
+    public String platformFilter="";
 
+    public void setPlatformFilter(String platformFilter) {
+        this.platformFilter = platformFilter;
+    }
+
+    public String genreFilter="";
+
+    public void setGenreFilter(String genreFilter) {
+        this.genreFilter = genreFilter;
+    }
+
+    public int y1Filter=0;
+
+    public void setY1Filter(int y1Filter) {
+        this.y1Filter = y1Filter;
+    }
+    public int y2Filter=0;
+
+    public void setY2Filter(int y2Filter) {
+        this.y2Filter = y2Filter;
+    }
+    public void filterUpdate(){
+        TextView t = findViewById(R.id.filterList);
+        if(platformFilter != "" | genreFilter!= "" | y1Filter!=0 | y2Filter != 0){
+            String filterList="";
+            if(platformFilter !=""){
+                filterList+= "Platform: "+platformFilter+ " ";
+            }
+            if(genreFilter !=""){
+                filterList+= "Genre: "+genreFilter+" ";
+            }
+            if(y1Filter !=0){
+                filterList+= "From "+y1Filter +" ";
+            }
+            if (y2Filter != 0) {
+                filterList+= "To "+y2Filter +" ";
+            }
+
+            t.setText(filterList);
+        }else{
+            t.setText("No Filters");
+        }
+
+    }
+
+    private boolean isFilterLoaded=false;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -84,11 +130,19 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
     }
 
     public void filterExpand(View view) {
+        platformFilter="";
+        genreFilter="";
+        y2Filter=0;
+        y1Filter=0;
+        filterUpdate();
         FilterFragment frag = new FilterFragment();
-        frag.show(getSupportFragmentManager(), "missiles");
+        if(isFilterLoaded) {
+            frag.show(getSupportFragmentManager(), "filterFrag");
+        }
     }
 
     public void searchPress(View view) {
+
         EditText entry = (EditText) findViewById(R.id.searchStringEntry);
         String searchStr = entry.getText().toString();
         if (searchStr == null) {
@@ -98,6 +152,13 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
             g.execute(searchStr);
         }
     }
+    public void SearchReset(View view){
+        platformFilter="";
+        genreFilter="";
+        y2Filter=0;
+        y1Filter=0;
+        filterUpdate();
+    }
 
     public void populator(String[] data) {
         adapter = new BrowseAdapter(data, this);
@@ -105,7 +166,7 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
         persist=data;
     }
 
-    public class getter extends AsyncTask<String, Void, List<gameCombo>> {
+    public class getter extends AsyncTask<String, String, List<gameCombo>> {
 
         @Override
         protected List<gameCombo> doInBackground(String... str) {
@@ -124,9 +185,10 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
         }
 
         @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-            System.out.println("network");
+        protected void onProgressUpdate(String... str) {
+            super.onProgressUpdate(str);
+            String s = str[0];
+            System.out.println(s);
         }
 
         @Override
@@ -144,7 +206,7 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
         }
 
         private List<gameCombo> GET(String input) {
-            publishProgress();
+
             String inputStr = input;
             List<gameCombo> results = new ArrayList<>();
             String API_KEY = "54b585e574a2d3fc29465538bc878c87";
@@ -159,7 +221,24 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
                 httpURLConnection.setRequestProperty("user-key", API_KEY);
                 httpURLConnection.setRequestProperty("Content-Type", "application/json");
                 //body text - string is converted to byte, passed to the outputStream
-                String str = "search \"" + inputStr + "\";where version_parent = null & category = 0;fields name;limit 50;";
+                String str = "search \"" + inputStr + "\";where version_parent = null & category = 0";
+                if(platformFilter!=""){
+                    int platformID = GameDatabase.getGameDatabase(getApplicationContext()).PlatformDao().getPlatform(platformFilter);
+                    str+=" & release_dates.platform = "+platformID;
+                }
+                if(genreFilter!="") {
+                    int genreID = GameDatabase.getGameDatabase(getApplicationContext()).GenreDao().getGenre(genreFilter);
+                    str+=" & genres = "+genreID;
+                }
+                if(y1Filter!=0){
+                    str+= " & release_dates.y>="+y1Filter;
+                }
+                if(y2Filter!=0){
+                    str+=" & release_dates.y<="+y2Filter;
+                }
+
+                str += ";fields name;limit 50;";
+                publishProgress(str);
                 byte[] outputBytes = str.getBytes();
                 OutputStream os = httpURLConnection.getOutputStream();
                 os.write(outputBytes);
@@ -244,6 +323,7 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
                 tab.setId(j+1);
                 GameDatabase.getGameDatabase(getApplicationContext()).GenreDao().insertGenre(tab);
             }
+            isFilterLoaded=true;
             return null;
         }
 
@@ -253,6 +333,7 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
             List<gameCombo> game = games[0];
             for(int i=0;i<game.size();i++){
                 System.out.println(game.get(i).getName());
+                System.out.println(game.get(i).getId());
             }
             game=games[1];
             for(int j=0;j<game.size();j++){
@@ -355,6 +436,10 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
         } else {
             outState.putStringArray("persist", persist);
         }
+        if(platformFilter!="")outState.putString("platformFilter",platformFilter);
+        if(genreFilter!="")outState.putString("genreFilter",genreFilter);
+        if(y1Filter!=0)outState.putInt("y1",y1Filter);
+        if(y2Filter!=0)outState.putInt("y2",y2Filter);
     }
 
     @Override
@@ -370,5 +455,18 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
         if (persist != null) {
             populator(persist);
         }
+        if(savedInstanceState.getString("platformFilter")!=null){
+            platformFilter=savedInstanceState.getString("platformFilter");
+        }
+        if(savedInstanceState.getString("genreFilter")!=null) {
+            genreFilter = savedInstanceState.getString("genreFilter");
+        }
+        if(savedInstanceState.getInt("y1")!=0) {
+            y1Filter = savedInstanceState.getInt("y1");
+        }
+        if(savedInstanceState.getInt("y20")!=0) {
+            y2Filter = savedInstanceState.getInt("y2");
+        }
+        filterUpdate();
     }
 }

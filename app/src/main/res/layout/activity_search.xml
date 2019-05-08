@@ -49,16 +49,13 @@
         android:id="@+id/filterExpandButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:background="@android:color/transparent"
         android:onClick="filterExpand"
         android:tint="@color/Black"
-        app:layout_constraintBottom_toBottomOf="@+id/filterList"
+        app:layout_constraintBottom_toBottomOf="@+id/filterResetButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/filterList"
-        app:layout_constraintTop_toTopOf="@+id/filterList"
+        app:layout_constraintTop_toTopOf="@+id/filterResetButton"
         app:srcCompat="@android:drawable/ic_menu_add" />
 
     <TextView
@@ -67,9 +64,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:text="No Filters"
-        app:layout_constraintEnd_toStartOf="@+id/filterExpandButton"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintEnd_toStartOf="@+id/filterResetButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchStringEntry" />
 
@@ -88,5 +85,17 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </FrameLayout>
+
+    <ImageButton
+        android:id="@+id/filterResetButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:onClick="SearchReset"
+        app:layout_constraintBottom_toBottomOf="@+id/filterList"
+        app:layout_constraintEnd_toStartOf="@+id/filterExpandButton"
+        app:layout_constraintTop_toTopOf="@+id/filterList"
+        app:srcCompat="@android:drawable/btn_dialog" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
