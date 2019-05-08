@@ -79,11 +79,8 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
             transaction.commit();
 
         }
-        GameInfoFragment frag = new GameInfoFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        //TODO: create a new fragment/use existing fragment for showing results in the recyclerview used before
-        //transaction.replace(R.id.searchResultsFrame,frag);
-        transaction.commit();
+        filterGet f = new filterGet();
+        f.execute();
     }
 
     public void filterExpand(View view) {
@@ -218,6 +215,133 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
         }
     }
 
+
+    public class filterGet extends AsyncTask<Void,List<gameCombo>,Void>{
+        List<gameCombo> platforms = new ArrayList<>();
+        List<gameCombo> genres = new ArrayList<>();
+        @Override
+        protected Void doInBackground(Void... voids) {
+            GameDatabase.getGameDatabase(getApplicationContext()).PlatformDao().deleteAllPlatforms();
+            GameDatabase.getGameDatabase(getApplicationContext()).GenreDao().deleteAllGenres();
+            getter(0,0);
+            getter(50,0);
+            getter(100,0);
+            getter(150,0);
+            getter(0,1);
+
+            publishProgress(platforms,genres);
+            for(int i =0; i< platforms.size(); i++){
+                PlatformTable plat = new PlatformTable();
+                plat.setName(platforms.get(i).getName());
+                plat.setIgdbId(platforms.get(i).getId());
+                plat.setId(i+1);
+                GameDatabase.getGameDatabase(getApplicationContext()).PlatformDao().insertPlatform(plat);
+            }
+            for(int j=0; j<genres.size(); j++){
+                GenreTable tab = new GenreTable();
+                tab.setName(genres.get(j).getName());
+                tab.setIgdbId(genres.get(j).getId());
+                tab.setId(j+1);
+                GameDatabase.getGameDatabase(getApplicationContext()).GenreDao().insertGenre(tab);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(List<gameCombo>... games) {
+            super.onProgressUpdate(games);
+            List<gameCombo> game = games[0];
+            for(int i=0;i<game.size();i++){
+                System.out.println(game.get(i).getName());
+            }
+            game=games[1];
+            for(int j=0;j<game.size();j++){
+                System.out.println(game.get(j).getName());
+            }
+        }
+
+        private void getter(int offset, int type) {
+            int n = offset;
+            int t = type;
+            InputStream is = null;
+            String API_KEY = "54b585e574a2d3fc29465538bc878c87";
+            HttpURLConnection httpURLConnection = null;
+
+            //assemble request, add url, and then headers, and then body text
+            try {
+                URL u;
+                //url
+                if (t == 0) {
+                    u = new URL("https://api-v3.igdb.com/platforms");
+                }else{
+                    u = new URL ("https://api-v3.igdb.com/genres");
+                }
+                httpURLConnection = (HttpURLConnection) u.openConnection();
+                //header fields
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setRequestProperty("user-key", API_KEY);
+                httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                //body text - string is converted to byte, passed to the outputStream
+                String str = "fields name;limit 50;offset "+n+";";
+                byte[] outputBytes = str.getBytes();
+                OutputStream os = httpURLConnection.getOutputStream();
+                os.write(outputBytes);
+                os.close();
+                httpURLConnection.connect();
+                //Read InputStream
+                //responseCode is the HTTP status code sent back from the server
+                int responseCode = httpURLConnection.getResponseCode();
+                //only try to interpret input stream if response code is ok (200)
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+
+                } else {
+                    is = httpURLConnection.getInputStream();
+                    if (is != null) {
+                        //if the input stream returns a valid result, send result to conversion
+                        //method below
+                        JsonReader reader = new JsonReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+                        reader.beginArray();
+                        while (reader.hasNext()) {
+                            reader.beginObject();
+                            int id = 0;
+                            String name = "";
+                            while (reader.hasNext()) {
+
+                                switch (reader.nextName()) {
+                                    case "id":
+                                        id = reader.nextInt();
+                                        break;
+                                    case "name":
+                                        name = reader.nextString();
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            gameCombo c = new gameCombo(id, name);
+                            if(t==0){
+                                platforms.add(c);
+                            }else {
+                                genres.add(c);
+                            }
+
+
+                            reader.endObject();
+                        }
+                        reader.endArray();
+                        is.close();
+
+                    }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                //Disconnect
+                httpURLConnection.disconnect();
+            }
+        }
+
+    }
     @Override
     protected void onStop() {
         super.onStop();

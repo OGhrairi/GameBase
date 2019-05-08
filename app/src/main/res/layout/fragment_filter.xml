@@ -16,13 +16,10 @@
         android:textAlignment="center"
         android:textSize="22sp" />
 
-    <Spinner
-        android:id="@+id/platformSpinner"
-        style="@android:style/Widget.Material.Spinner"
+    <AutoCompleteTextView
+        android:id="@+id/platformSelector"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="4dp"
-        android:paddingVertical="8dp" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/filterYearTitle"
@@ -75,7 +72,7 @@
             android:textAlignment="center" />
 
         <ImageButton
-            android:id="@+id/imageButton"
+            android:id="@+id/clearButton"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
@@ -91,29 +88,10 @@
         android:textAlignment="center"
         android:textSize="22sp" />
 
-    <Spinner
-        android:id="@+id/genreSpinner"
-        style="@android:style/Widget.Material.Spinner"
+    <AutoCompleteTextView
+        android:id="@+id/genreSelector"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="4dp"
-        android:paddingVertical="8dp" />
-
-    <TextView
-        android:id="@+id/filterTypeTitle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Type"
-        android:textAlignment="center"
-        android:textSize="22sp" />
-
-    <Spinner
-        android:id="@+id/typeSpinner"
-        style="@android:style/Widget.Material.Spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="4dp"
-        android:paddingVertical="8dp" />
+        android:layout_height="wrap_content" />
 
     <LinearLayout
         android:id="@+id/filterButtonLayout"

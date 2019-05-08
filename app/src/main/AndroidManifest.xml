@@ -22,7 +22,8 @@
             android:parentActivityName=".HomeActivity"/>
         <activity
             android:name=".SearchActivity"
-            android:parentActivityName=".HomeActivity" />
+            android:parentActivityName=".HomeActivity"
+            />
         <activity android:name=".HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
