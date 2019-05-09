@@ -33,11 +33,11 @@ public class FeedTable {
 
     @ColumnInfo(name = "article_date")
     @NonNull
-    private Date date;
+    private Long date;
 
     @NonNull
-    public Date getDate() { return date; }
-    public void setDate(@NonNull Date date) { this.date = date; }
+    public Long getDate() { return date; }
+    public void setDate(@NonNull Long date) { this.date = date; }
 
     @ColumnInfo(name = "article_source")
     @NonNull
