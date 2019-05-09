@@ -69,20 +69,12 @@ public class FilterTabFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_filter, container, false);
         autoPlatform = view.findViewById(R.id.platformSelector);
         autoGenre = view.findViewById(R.id.genreSelector);
-
+        ImageButton clearButton = view.findViewById(R.id.clearButton);
+        clearButton.setVisibility(View.INVISIBLE);
+        Button cancelButton = view.findViewById(R.id.filterCancel);
+        cancelButton.setText("Clear");
         final EditText yr1 = view.findViewById(R.id.filterYearFrom);
         final EditText yr2 = view.findViewById(R.id.filterYearTo);
-
-        ImageButton clearButton = view.findViewById(R.id.clearButton);
-        clearButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                yr1.setText("");
-                yr2.setText("");
-            }
-        });
-        Button cancelButton = view.findViewById(R.id.filterCancel);
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

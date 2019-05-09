@@ -44,22 +44,40 @@ public class FilterFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         view = inflater.inflate(R.layout.fragment_filter,null);
+        ImageButton clearButton = view.findViewById(R.id.clearButton);
+        Button cancelButton = view.findViewById(R.id.filterCancel);
+        cancelButton.setText("Cancel");
         builder.setView(view);
         final EditText yr1 = view.findViewById(R.id.filterYearFrom);
         final EditText yr2 = view.findViewById(R.id.filterYearTo);
+        final AutoCompleteTextView platform = view.findViewById(R.id.platformSelector);
+        final AutoCompleteTextView genre = view.findViewById(R.id.genreSelector);
+        Bundle bundle = this.getArguments();
+        if(!bundle.isEmpty()) {
+            int y1 = bundle.getInt("y1",0);
+            int y2 = bundle.getInt("y2",0);
+           // yr1.setText(bundle.getInt("y1", 0));
+            if(y1 != 0)yr1.setText(Integer.toString(y1));
+            if(y2 != 0)yr2.setText(Integer.toString(y2));
+           // yr2.setText(bundle.getInt("y2", 0));
+            platform.setText(bundle.getString("platform", ""));
+            genre.setText(bundle.getString("genre", ""));
+        }else System.out.println("bundle is empty");
         getter g = new getter();
         g.execute();
-        ImageButton clearButton = view.findViewById(R.id.clearButton);
+
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 yr1.setText("");
                 yr2.setText("");
+                platform.setText("");
+                genre.setText("");
 
             }
         });
-        Button cancelButton = view.findViewById(R.id.filterCancel);
+
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -73,20 +91,18 @@ public class FilterFragment extends DialogFragment {
             public void onClick(View v) {
                 Activity a = getActivity();
                 if(a instanceof SearchActivity){
-                    AutoCompleteTextView platform = view.findViewById(R.id.platformSelector);
-                    AutoCompleteTextView genre = view.findViewById(R.id.genreSelector);
-                    if(!TextUtils.isEmpty(platform.getText().toString())){
-                    ((SearchActivity) a).setPlatformFilter(autoPlatform.getText().toString());
-                    }
+                    if(!TextUtils.isEmpty(platform.getText().toString())) {
+                        ((SearchActivity) a).setPlatformFilter(autoPlatform.getText().toString());
+                    }else((SearchActivity) a).setPlatformFilter("");
                     if(!TextUtils.isEmpty(genre.getText().toString())) {
                         ((SearchActivity) a).setGenreFilter(autoGenre.getText().toString());
-                    }
+                    }else((SearchActivity) a).setGenreFilter("");
                     if(!TextUtils.isEmpty(yr1.getText().toString())){
                         ((SearchActivity) a).setY1Filter(Integer.parseInt(yr1.getText().toString()));
-                    }
+                    }else((SearchActivity)a).setY1Filter(0);
                     if(!TextUtils.isEmpty(yr2.getText().toString())){
                         ((SearchActivity) a).setY2Filter(Integer.parseInt(yr2.getText().toString()));
-                    }
+                    }else((SearchActivity)a).setY2Filter(0);
                     ((SearchActivity) a).filterUpdate();
                     dismiss();
                 }

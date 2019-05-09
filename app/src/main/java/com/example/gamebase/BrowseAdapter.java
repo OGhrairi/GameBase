@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
+
+//adapter for recyclerview
 public class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.BrowseViewHolder> {
     private String[] list;
     private List<BrowseResultsTable> titles;
@@ -19,6 +21,7 @@ public class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.BrowseView
         this.mOnBrowseListener = OnBrowseListener;
     }
 
+    //Class which holds items of each entry in a ViewHolder, for use by the recycler
     public static class BrowseViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         public TextView txt;
         public LinearLayout layout;

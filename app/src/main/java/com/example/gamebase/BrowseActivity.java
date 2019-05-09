@@ -170,7 +170,7 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
             int length = titles.size();
             String[] myDataset = new String[length];
             for (int i = 0; i < (length); i++) {
-                myDataset[i] = titles.get(i).getTitle() + " id: " + titles.get(i).getIgdbId();
+                myDataset[i] = titles.get(i).getTitle();
             }
             pageSwitcher(myDataset);
 

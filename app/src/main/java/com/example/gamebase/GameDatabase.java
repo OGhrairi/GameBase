@@ -6,7 +6,7 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {BrowseResultsTable.class, SearchResultTable.class, PlatformTable.class, GenreTable.class}, version = 1)
+@Database(entities = {BrowseResultsTable.class, SearchResultTable.class, PlatformTable.class, GenreTable.class, FeedTable.class}, version = 1)
 public abstract class GameDatabase extends RoomDatabase {
 
     private static GameDatabase INSTANCE;
@@ -15,6 +15,7 @@ public abstract class GameDatabase extends RoomDatabase {
     public abstract SearchDao SearchDao();
     public abstract GenreDao GenreDao();
     public abstract PlatformDao PlatformDao();
+    public abstract FeedDao FeedDao();
 
     public static GameDatabase getGameDatabase (Context context){
         if(INSTANCE == null){

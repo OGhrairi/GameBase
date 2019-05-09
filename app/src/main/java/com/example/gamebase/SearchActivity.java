@@ -130,14 +130,21 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
     }
 
     public void filterExpand(View view) {
-        platformFilter="";
-        genreFilter="";
-        y2Filter=0;
-        y1Filter=0;
         filterUpdate();
         FilterFragment frag = new FilterFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("platform",platformFilter);
+        bundle.putString("genre",genreFilter);
+        bundle.putInt("y1",y1Filter);
+        bundle.putInt("y2",y2Filter);
+        frag.setArguments(bundle);
         if(isFilterLoaded) {
             frag.show(getSupportFragmentManager(), "filterFrag");
+        }else{
+            while(!isFilterLoaded){
+
+            }
+            frag.show(getSupportFragmentManager(),"filterFrag");
         }
     }
 
@@ -166,7 +173,7 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
         persist=data;
     }
 
-    public class getter extends AsyncTask<String, String, List<gameCombo>> {
+    public class getter extends AsyncTask<String, Void, List<gameCombo>> {
 
         @Override
         protected List<gameCombo> doInBackground(String... str) {
@@ -184,25 +191,17 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
             return gameList;
         }
 
-        @Override
-        protected void onProgressUpdate(String... str) {
-            super.onProgressUpdate(str);
-            String s = str[0];
-            System.out.println(s);
-        }
+
 
         @Override
         protected void onPostExecute(List<gameCombo> gameCombos) {
             super.onPostExecute(gameCombos);
             int length = gameCombos.size();
-            System.out.println(length);
             String[] myDataset = new String[length];
             for (int i = 0; i < (length); i++) {
-                myDataset[i] = gameCombos.get(i).getName() + " id: " + gameCombos.get(i).getId();
-                System.out.println(myDataset[i]);
+                myDataset[i] = gameCombos.get(i).getName();
             }
             populator(myDataset);
-
         }
 
         private List<gameCombo> GET(String input) {
@@ -238,7 +237,6 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
                 }
 
                 str += ";fields name;limit 50;";
-                publishProgress(str);
                 byte[] outputBytes = str.getBytes();
                 OutputStream os = httpURLConnection.getOutputStream();
                 os.write(outputBytes);
@@ -300,13 +298,17 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
         List<gameCombo> genres = new ArrayList<>();
         @Override
         protected Void doInBackground(Void... voids) {
-            GameDatabase.getGameDatabase(getApplicationContext()).PlatformDao().deleteAllPlatforms();
-            GameDatabase.getGameDatabase(getApplicationContext()).GenreDao().deleteAllGenres();
-            getter(0,0);
-            getter(50,0);
-            getter(100,0);
-            getter(150,0);
-            getter(0,1);
+            if(GameDatabase.getGameDatabase(getApplicationContext()).PlatformDao().getAllPlatforms().size()==0){
+                getter(0,0);
+                getter(50,0);
+                getter(100,0);
+                getter(150,0);
+            }
+            if(GameDatabase.getGameDatabase(getApplicationContext()).GenreDao().getAllGenres().size()==0){
+                getter(0,1);
+
+            }
+
 
             publishProgress(platforms,genres);
             for(int i =0; i< platforms.size(); i++){

@@ -4,6 +4,8 @@ package com.example.gamebase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ public class GameInfoFragment extends Fragment {
             titleView.setText(title);
             TextView descView = view.findViewById(R.id.gameInfoDesc);
             descView.setText(desc);
+            descView.setMovementMethod(new ScrollingMovementMethod());
         }
         return view;
     }
