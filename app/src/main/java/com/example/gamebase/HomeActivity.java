@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
     }
     public void goToHelp(View view){
         Intent intent = new Intent(HomeActivity.this, WebViewActivity.class);
-        intent.putExtra("parent",0);
+        intent.putExtra("url","file:///android_asset/helpPage.html");
         startActivity(intent);
     }
 
