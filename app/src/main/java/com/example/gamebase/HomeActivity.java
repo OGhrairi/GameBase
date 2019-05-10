@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import androidx.appcompat.widget.Toolbar;
 
-import java.util.ArrayList;
-
 public class HomeActivity extends AppCompatActivity {
 
 
@@ -38,7 +36,8 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(intent);
     }
     public void goToHelp(View view){
-        Intent intent = new Intent(HomeActivity.this, HelpActivity.class);
+        Intent intent = new Intent(HomeActivity.this, WebViewActivity.class);
+        intent.putExtra("parent",0);
         startActivity(intent);
     }
 

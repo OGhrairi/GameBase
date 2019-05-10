@@ -4,14 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
+import android.text.format.DateUtils;
 import android.icu.text.SimpleDateFormat;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Adapter;
+import android.widget.ProgressBar;
 
 import org.json.JSONObject;
 
@@ -63,23 +65,15 @@ public class NewsFeedActivity extends AppCompatActivity {
         }else return super.onOptionsItemSelected(item);
 
     }
-    private static class dataView{
-        String img;
-        Long date;
-        int srcId;
-        String title;
-        int siteId;
-        dataView(String img, Long date, int srcId, String title, int siteId){
-            this.img=img;
-            this.date=date;
-            this.srcId=srcId;
-            this.title=title;
-            this.siteId=siteId;
-        }
+    public void webOpener(List<String> titles, List<String> imageUrls, List<String> bodies, List<String> Urls){
+        adapter = new FeedAdapter(titles,imageUrls,bodies,Urls,this);
+        ProgressBar bar = findViewById(R.id.feedProgressBar);
+        bar.setVisibility(View.INVISIBLE);
+        recyclerView.setAdapter(adapter);
+        RecyclerView v = findViewById(R.id.feedRecycler);
+        v.setVisibility(View.VISIBLE);
     }
-    public class loader extends AsyncTask<Boolean,String,List<FeedTable>>{
-
-
+    public class loader extends AsyncTask<Boolean,Void,List<FeedTable>>{
         List<String> title = new ArrayList<>();
         List<String> articleUrl = new ArrayList<>();
         List<Integer> siteUrlId = new ArrayList<>();
@@ -91,50 +85,47 @@ public class NewsFeedActivity extends AppCompatActivity {
         protected List<FeedTable> doInBackground(Boolean... bools) {
             if(bools[0]) {
                 GameDatabase.getGameDatabase(getApplicationContext()).FeedDao().deleteAllFeeds();
+                publishProgress();
+                RecyclerView v = findViewById(R.id.feedRecycler);
+                v.setVisibility(View.INVISIBLE);
                 GET();
             }
             return GameDatabase.getGameDatabase(getApplicationContext()).FeedDao().getAllFeeds();
         }
 
         @Override
-        protected void onProgressUpdate(String... values) {
+        protected void onProgressUpdate(Void... values) {
             super.onProgressUpdate(values);
-           /* dataView view = values[0];
-            Long date=view.date;
-            int srcId=view.srcId;
-            String title=view.title;
-            int siteId=view.siteId;
-            String img = view.img;
-            System.out.println("IMAGEURL: "+img);
-            System.out.println("DATE: "+date);
-            System.out.println(" SOURCE ID: "+srcId);
-            System.out.println("TITLE: "+title);
-            System.out.println("SITE ID: "+siteId);*/
-           System.out.println(values[0]);
+            ProgressBar bar = findViewById(R.id.feedProgressBar);
+            bar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected void onPostExecute(List<FeedTable> feedTables) {
             super.onPostExecute(feedTables);
+
             List<String> titles = new ArrayList<>();
             List<String> imageUrls = new ArrayList<>();
             List<String> bodies = new ArrayList<>();
+            List<String> Urls = new ArrayList<>();
             List<FeedTable> articles = feedTables;
             for(int i=0; i<articles.size(); i++){
                 titles.add(articles.get(i).getTitle());
                 imageUrls.add(articles.get(i).getImageUrl());
+                Urls.add(articles.get(i).getArticleUrl());
                 try {
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd");
                     Date date = new Date(articles.get(i).getDate()*1000L);
+                    Long millis = articles.get(i).getDate()*1000L;
                     String d = simpleDateFormat.format(date);
-                    String bod = "From "+articles.get(i).getSourceName()+" - "+d;
+                    String rel = DateUtils.getRelativeTimeSpanString(millis,System.currentTimeMillis(),DateUtils.MINUTE_IN_MILLIS).toString();
+                    String bod = "From "+articles.get(i).getSourceName()+" - "+rel;
                     bodies.add(bod);
                 }catch (Exception e){
                     e.printStackTrace();
                 }
             }
-            adapter = new FeedAdapter(titles,imageUrls,bodies,getApplicationContext());
-            recyclerView.setAdapter(adapter);
+            webOpener(titles,imageUrls,bodies,Urls);
 
         }
 
