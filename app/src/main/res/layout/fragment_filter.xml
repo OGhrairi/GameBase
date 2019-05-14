@@ -77,7 +77,7 @@
             android:layout_height="match_parent"
             android:background="@android:color/transparent"
             android:paddingHorizontal="6dp"
-            android:src="@android:drawable/ic_delete" />
+            android:src="@drawable/sharp_clear_black_36" />
     </LinearLayout>
 
     <TextView
@@ -103,13 +103,15 @@
             android:id="@+id/filterCancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/primaryDarkColor" />
 
         <Button
             android:id="@+id/filterApply"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@color/primaryDarkColor"
             android:text="Apply" />
     </LinearLayout>
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/secondaryDarkColor"
     tools:context=".SearchActivity">
 
     <LinearLayout
@@ -27,7 +28,7 @@
                 android:onClick="SearchReset"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/searchStringEntry"
-                app:srcCompat="@android:drawable/btn_dialog" />
+                app:srcCompat="@drawable/sharp_remove_circle_outline_black_36" />
 
             <EditText
                 android:id="@+id/searchStringEntry"
@@ -61,6 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:background="@color/primaryColor"
                 android:onClick="searchPress"
                 android:text="@string/btnSearchTxt"
                 app:layout_constraintBottom_toBottomOf="@+id/searchStringEntry"
@@ -114,7 +116,7 @@
         android:id="@+id/searchToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/SlateGray"
+        android:background="@color/primaryColor"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"

@@ -13,6 +13,6 @@
         android:paddingVertical="10dp"
         android:text="TextView"
         android:textAlignment="center"
-        android:textColor="?attr/editTextColor"
+        android:textColor="@color/secondaryTextColor"
         android:textSize="18sp" />
 </LinearLayout>

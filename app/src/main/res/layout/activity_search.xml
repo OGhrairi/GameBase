@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/secondaryDarkColor"
     tools:context=".SearchActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/searchToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/SlateGray"
+        android:background="@color/primaryColor"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
@@ -24,7 +25,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:ems="10"
         android:hint="Enter Game Title"
         android:inputType="textPersonName"
@@ -37,6 +38,7 @@
         android:id="@+id/buttonSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@color/primaryColor"
         android:onClick="searchPress"
         android:text="@string/btnSearchTxt"
         app:layout_constraintBottom_toBottomOf="@+id/searchStringEntry"
@@ -52,18 +54,17 @@
         android:layout_marginEnd="8dp"
         android:background="@android:color/transparent"
         android:onClick="filterExpand"
-        android:tint="@color/Black"
         app:layout_constraintBottom_toBottomOf="@+id/filterResetButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/filterResetButton"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        app:srcCompat="@drawable/sharp_add_circle_outline_black_36" />
 
     <TextView
         android:id="@+id/filterList"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="8dp"
         android:text="No Filters"
         app:layout_constraintEnd_toStartOf="@+id/filterResetButton"
@@ -96,6 +97,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/filterList"
         app:layout_constraintEnd_toStartOf="@+id/filterExpandButton"
         app:layout_constraintTop_toTopOf="@+id/filterList"
-        app:srcCompat="@android:drawable/btn_dialog" />
+        app:srcCompat="@drawable/sharp_remove_circle_outline_black_36" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

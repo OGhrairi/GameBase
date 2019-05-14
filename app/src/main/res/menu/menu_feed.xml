@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/feedMenuRefresh"
-        android:icon="@android:drawable/stat_notify_sync"
+        android:icon="@drawable/sharp_refresh_black_48"
         android:title="Refresh"
         app:showAsAction="ifRoom" />
 </menu>

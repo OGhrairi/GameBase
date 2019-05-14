@@ -4,13 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/secondaryDarkColor"
     tools:context=".NewsFeedActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/feedToolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/SlateGray"
+        android:background="@color/primaryColor"
         android:elevation="4dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
@@ -32,10 +33,11 @@
 
     <ProgressBar
         android:id="@+id/feedProgressBar"
-        style="?android:attr/progressBarStyleLarge"
+        style="@android:style/Widget.Material.Light.ProgressBar.Large"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:progressTint="@color/primaryDarkColor"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
