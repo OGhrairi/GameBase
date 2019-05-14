@@ -6,4 +6,9 @@
         android:id="@+id/browseMenuRefresh"
         android:title="Refresh"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/tabInfoShareButton"
+        android:title="Item"
+        app:showAsAction="ifRoom"
+        app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider" />
 </menu>

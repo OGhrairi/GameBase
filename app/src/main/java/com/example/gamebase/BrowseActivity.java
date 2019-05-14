@@ -1,6 +1,8 @@
 package com.example.gamebase;
 
+import androidx.appcompat.widget.ShareActionProvider;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -43,6 +45,17 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
     public void pageSwitcher(String[] data){
         adapter = new BrowseAdapter(data,this);
         recyclerView.setAdapter(adapter);
+
+    }
+
+    @Override
+    public void setIntent() {
+        super.setIntent();
+        ShareActionProvider shareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(shareButton);
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT,shareText);
+        shareActionProvider.setShareIntent(shareIntent);
     }
 
     //custom datatype used in storing data from the api to the local database
@@ -101,10 +114,12 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
         a.execute(1);
 
     }
+    MenuItem shareButton;
     //inflate menu button
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_browse,menu);
+        shareButton = menu.findItem(R.id.tabInfoShareButton);
         return true;
     }
     @Override
@@ -147,7 +162,6 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
                     title.setIgdbId(titleList.get(i).getId());
                     GameDatabase.getGameDatabase(getApplicationContext()).BrowseDao().insertGame(title);
                 }
-                //publishProgress(1);
             }
             return GameDatabase.getGameDatabase(getApplicationContext()).BrowseDao().getAllGames();
         }

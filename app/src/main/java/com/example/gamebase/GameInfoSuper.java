@@ -1,10 +1,14 @@
 package com.example.gamebase;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.JsonReader;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ShareActionProvider;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.FragmentTransaction;
 
 import java.io.IOException;
@@ -19,7 +23,7 @@ public abstract class GameInfoSuper extends AppCompatActivity {
     //abstract class which encompasses common functionality when displaying game info either on
     //its own page, or alongside browse page
     public String[] persist;
-
+    public String shareText;
     //responsible for retrieving game information when a game is pressed on the recyclerview
     public class getter extends AsyncTask<Integer,Void,String[]> {
 
@@ -52,6 +56,8 @@ public abstract class GameInfoSuper extends AppCompatActivity {
             transaction.replace(R.id.gameInfoFrame, frag);
             transaction.commit();
             persist = strings;
+            shareText=title+": "+desc;
+            setIntent();
         }
 
         private String[] GET(int id) {
@@ -117,6 +123,9 @@ public abstract class GameInfoSuper extends AppCompatActivity {
             }
             return results;
         }
+
+    }
+    public void setIntent(){
 
     }
 }

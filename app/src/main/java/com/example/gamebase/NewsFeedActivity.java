@@ -60,6 +60,10 @@ public class NewsFeedActivity extends AppCompatActivity {
         int id = item.getItemId();
         if (id == R.id.feedMenuRefresh) {
             loader l = new loader();
+            if(findViewById(R.id.feedRecycler)!=null){
+                RecyclerView v = findViewById(R.id.feedRecycler);
+                v.setVisibility(View.INVISIBLE);
+            }
             l.execute(true);
             return true;
         }else return super.onOptionsItemSelected(item);
@@ -86,8 +90,6 @@ public class NewsFeedActivity extends AppCompatActivity {
             if(bools[0]) {
                 GameDatabase.getGameDatabase(getApplicationContext()).FeedDao().deleteAllFeeds();
                 publishProgress();
-                RecyclerView v = findViewById(R.id.feedRecycler);
-                v.setVisibility(View.INVISIBLE);
                 GET();
             }
             return GameDatabase.getGameDatabase(getApplicationContext()).FeedDao().getAllFeeds();
