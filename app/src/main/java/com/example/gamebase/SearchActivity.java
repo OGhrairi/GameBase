@@ -1,7 +1,10 @@
 package com.example.gamebase;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.JsonReader;
 import android.view.View;
@@ -9,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -106,6 +111,7 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        createNotificationChannel();
         setContentView(R.layout.activity_search);
         Toolbar childBar = (Toolbar) findViewById(R.id.searchToolbar);
         setSupportActionBar(childBar);
@@ -173,6 +179,20 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
         persist=data;
     }
 
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("channel","channel",importance);
+            channel.setDescription("channel");
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
     public class getter extends AsyncTask<String, Void, List<gameCombo>> {
 
         @Override
@@ -202,6 +222,15 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
                 myDataset[i] = gameCombos.get(i).getName();
             }
             populator(myDataset);
+
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),"channel")
+                    .setContentTitle("Search Results")
+                    .setContentText("Search results are ready to view")
+                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+            NotificationManagerCompat managerCompat = NotificationManagerCompat.from(getApplicationContext());
+            managerCompat.notify(0,builder.build());
+
         }
 
         private List<gameCombo> GET(String input) {

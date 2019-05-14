@@ -8,18 +8,21 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 public class WebViewActivity extends AppCompatActivity {
     String url;
     WebView webView;
+    boolean isHelp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         Intent intent = getIntent();
         url = intent.getStringExtra("url");
+        isHelp = intent.getBooleanExtra("helpbool",false);
         Toolbar childBar = (Toolbar) findViewById(R.id.webViewToolbar);
         setSupportActionBar(childBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -37,7 +40,11 @@ public class WebViewActivity extends AppCompatActivity {
     //inflate menu button
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_webview,menu);
+        if(isHelp) {
+            getMenuInflater().inflate(R.menu.menu_helpview, menu);
+        }else{
+            getMenuInflater().inflate(R.menu.menu_webview,menu);
+        }
         return true;
     }
     @Override
@@ -56,6 +63,7 @@ public class WebViewActivity extends AppCompatActivity {
         }
         return true;
     }
+
     public void externalBrowser(){
         Uri webpage = Uri.parse(url);
         Intent intent = new Intent(Intent.ACTION_VIEW,webpage);

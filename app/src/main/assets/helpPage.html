@@ -1,8 +1,85 @@
 <html>
-    <head>
-
-    </head>
-    <body>
-        <H1>This is the help page</H1>
-    </body>
+    <link rel="stylesheet" type="text/css" href="helpStyle.css">
+    <meta name="viewport"
+    content="width=device-width, initial-scale=1">
+<head>
+        
+</head>
+<body>
+    <div>
+        <H1  id="title">GameBase Help Page</H1>
+    </div>
+    <div>
+        <h2>Overview</h2>
+        <p>GameBase is an app that provides video game and game related information. The features include a news feed with a collation of recent video game related articles, 
+            a search function with filtering to find a game's description, and a top 50 game list, based on a combination of metrics.
+        </p>
+    </div>
+    <div class="row">
+        <div class="titleDiv col-12 col-m-12 col-s-12">
+            <h2>News Feed</h2>
+        </div>
+        <div class="col-6 col-s-6 col-m-6" >
+            <p>The news feed page retrieves a collated list of the 20 most recent video game related news articles, from a variety of sources. Pressing on any of the article cards 
+                will redirect you to the article, displaying within the app. From that screen, you can open the article in your web browser instead, should you wish. 
+            </p>
+        </div>
+        <div class="col-6 col-s-6 col-m-6">
+            <picture>
+                <source media="(min-width:601px)" srcset="newsfeed-med.jpg">
+                <source media="(max-width:600px)" srcset="newsfeed-small.jpg">    
+                <img src="newsfeed-large.jpg">
+            </picture>
+        </div>
+    </div>
+    <div class="row">
+        <div class="titleDiv col-12 col-m-12 col-s-12">
+            <h2>Game Search</h2>
+        </div>
+        <div class="col-6 col-s-6 col-m-6" >
+            <p>When opening the game search page, you will be presented by a text entry field and a series of buttons; one to perform the search based on an entered game title, one to add
+                filters to the search, and one to clear the filters. Once a search has been performed, the results will be displayed on the screen. Tapping on any of these results will redirect you
+                to a game information page, containing a description of the game and allowing you to share the game through external apps.
+            </p>
+        </div>
+        <div class="col-6 col-s-6 col-m-6">
+            <picture>
+                <source media="(min-width:601px)" srcset="searchscreen-med.jpg">
+                <source media="(max-width:600px)" srcset="searchscreen-small.jpg">    
+                <img src="searchscreen-large.jpg">
+            </picture>
+        </div>
+    </div>
+    <div class= "row">
+        <div class="col-6 col-s-6 col-m-6" >
+            <p>The search filter form contains a few fields: <br>
+                Platform: to select a game platform, begin typing in the platform name. A dropdown will appear with autofill suggestions<br>
+                Year: enter a date range for the search. Bear in mind that you do not need to set both</p>
+        </div>
+        <div class="col-6 col-s-6 col-m-6">
+            <picture>
+                <source media="(min-width:601px)" srcset="searchfilter-med.jpg">
+                <source media="(max-width:600px)" srcset="searchfilter-small.jpg">    
+                <img src="searchfilter-large.jpg">
+            </picture>
+        </div>
+    </div>
+    <div class="row">
+        <div class="titleDiv col-12 col-m-12 col-s-12">
+            <h2>Top 50 Browse</h2>
+        </div>
+        <div class="col-6 col-s-6 col-m-6" >
+            <p>The Top 50 page provides a list of the 50 highest rated games in the database, based on a combination of factors including average review, number of reviews and 
+                        hype around the games. On selection of a game, you will be redirected to the same game information layout as the one in the search page.
+            </p>
+        </div>
+        <div class="col-6 col-s-6 col-m-6">
+            <picture>
+                <source media="(min-width:601px)" srcset="top50-med.jpg">
+                <source media="(max-width:600px)" srcset="top50-small.jpg">    
+                <img src="top50-large.jpg">
+            </picture>
+        </div>  
+    </div>  
+</body> 
 </html>

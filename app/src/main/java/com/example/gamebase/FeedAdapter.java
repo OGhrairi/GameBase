@@ -58,6 +58,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
                 String url = mUrls.get(position);
                 Intent intent = new Intent(mContext,WebViewActivity.class);
                 intent.putExtra("url",url);
+                intent.putExtra("helpbool",false);
                 mContext.startActivity(intent);
             }
         });

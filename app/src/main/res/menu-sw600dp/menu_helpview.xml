@@ -7,8 +7,4 @@
         android:icon="@drawable/sharp_refresh_black_48"
         android:title="Refresh"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/webViewExternalButton"
-        android:title="Open in browser"
-        app:showAsAction="always" />
 </menu>
