@@ -30,9 +30,6 @@ import java.util.List;
 public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBrowseListener {
     @Override
     public void onBrowseClick(int position) {
-        //check if using tablet, if so, fragment is inflated on this page, otherwise navigate to
-        //game info dedicated page
-        //position starts at 0
             Intent intent = new Intent(this, GameInfoActivity.class);
             intent.putExtra("id", position + 1);
             intent.putExtra("tableid",1);
@@ -184,7 +181,7 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("channel","channel",importance);
+            NotificationChannel channel = new NotificationChannel("resultsChannel","channel",importance);
             channel.setDescription("channel");
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
@@ -211,8 +208,6 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
             return gameList;
         }
 
-
-
         @Override
         protected void onPostExecute(List<gameCombo> gameCombos) {
             super.onPostExecute(gameCombos);
@@ -223,7 +218,7 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
             }
             populator(myDataset);
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),"channel")
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(),"resultsChannel")
                     .setContentTitle("Search Results")
                     .setContentText("Search results are ready to view")
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
@@ -322,7 +317,10 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
     }
 
 
-    public class filterGet extends AsyncTask<Void,List<gameCombo>,Void>{
+    //this is an asyncTask which is reponsible for retrieving lists of all platforms and genres from the database
+    //to be used in the autocompletetext fields in the filter. Note that this retrieval only occurs when
+    //the respective local tables are empty, i.e. only happens on first run of the app.
+    public class filterGet extends AsyncTask<Void,Void,Void>{
         List<gameCombo> platforms = new ArrayList<>();
         List<gameCombo> genres = new ArrayList<>();
         @Override
@@ -337,9 +335,6 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
                 getter(0,1);
 
             }
-
-
-            publishProgress(platforms,genres);
             for(int i =0; i< platforms.size(); i++){
                 PlatformTable plat = new PlatformTable();
                 plat.setName(platforms.get(i).getName());
@@ -358,19 +353,6 @@ public class SearchActivity extends GameInfoSuper implements BrowseAdapter.OnBro
             return null;
         }
 
-        @Override
-        protected void onProgressUpdate(List<gameCombo>... games) {
-            super.onProgressUpdate(games);
-            List<gameCombo> game = games[0];
-            for(int i=0;i<game.size();i++){
-                System.out.println(game.get(i).getName());
-                System.out.println(game.get(i).getId());
-            }
-            game=games[1];
-            for(int j=0;j<game.size();j++){
-                System.out.println(game.get(j).getName());
-            }
-        }
 
         private void getter(int offset, int type) {
             int n = offset;

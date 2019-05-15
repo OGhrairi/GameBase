@@ -268,37 +268,4 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
         }
 
     }
-
-    //onStop/onStart handlers for maintaining the listview results on screen rotation
-    @Override
-    protected void onStop() {
-        super.onStop();
-        onSaveInstanceState(new Bundle());
-    }
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        if (persist == null) {
-        }else{
-            outState.putStringArray("persist", persist);
-        }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        onRestoreInstanceState(new Bundle());
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        persist=savedInstanceState.getStringArray("persist");
-        if(persist != null) {
-            TextView titleView = findViewById(R.id.gameInfoTitle);
-            titleView.setText(persist[0]);
-            TextView descView = findViewById(R.id.gameInfoDesc);
-            descView.setText(persist[1]);
-        }
-    }
 }
