@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.util.JsonReader;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
 import android.widget.Toast;
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,10 +24,11 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-
+//extends the common class between the phone and tablet versions of this page
 public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBrowseListener{
 
     @Override
+    //Method that is called when one of the games in the recyclerview list is pressed
     public void onBrowseClick(int position) {
         //check if using tablet, if so, fragment is inflated on this page, otherwise navigate to
         //game info dedicated page
@@ -42,11 +42,7 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
             g.execute(position+1,0);
         }
     }
-    public void pageSwitcher(String[] data){
-        adapter = new BrowseAdapter(data,this);
-        recyclerView.setAdapter(adapter);
 
-    }
 
     @Override
     public void setIntent() {
@@ -145,7 +141,9 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
         }
         @Override
         protected List<BrowseResultsTable> doInBackground(Integer... inputArg) {
-            //if input 0, clears table and repopulates with fresh data from server
+            /*input argument is based on how the task is called; if it's called with the activity's
+            onLoad, it simply retrieves the game list from the local database. If it is called from the
+            refresh button, it clears the database and retrieves fresh results from the API*/
             if (inputArg[0].equals(0)) {
                 //let user know it is refreshing data
                 publishProgress(0);
@@ -163,17 +161,14 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
                     GameDatabase.getGameDatabase(getApplicationContext()).BrowseDao().insertGame(title);
                 }
             }
+            //return a list of all games from the table
             return GameDatabase.getGameDatabase(getApplicationContext()).BrowseDao().getAllGames();
         }
-
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
             if(values[0].equals(0)) {
                 Toast.makeText(BrowseActivity.this, "Fetching Data", Toast.LENGTH_SHORT).show();
-            }
-            if(values[0].equals(1)){
-                Toast.makeText(BrowseActivity.this, "Data Retrieved", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -186,9 +181,11 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
             for (int i = 0; i < (length); i++) {
                 myDataset[i] = titles.get(i).getTitle();
             }
+            //once each title from the table results is added to an array, pass the array to a method
+            //which creates the recycle adapter and binds results to it
             pageSwitcher(myDataset);
-
         }
+
         //method which handles all web stuff on this activity
         //no input args, and returns an array of top 50 game titles
         private List<gameCombo> GET() {
@@ -231,7 +228,6 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
                         }
                         reader.endArray();
                         is.close();
-
                     }
                 }
             } catch (IOException e) {
@@ -266,6 +262,12 @@ public class BrowseActivity extends GameInfoSuper implements BrowseAdapter.OnBro
             gameCombo combo = new gameCombo(id,name);
             return combo;
         }
+
+    }
+    //responsible for creating the recyclerview adapter and passing the retrieved game list to it
+    public void pageSwitcher(String[] data){
+        adapter = new BrowseAdapter(data,this);
+        recyclerView.setAdapter(adapter);
 
     }
 }

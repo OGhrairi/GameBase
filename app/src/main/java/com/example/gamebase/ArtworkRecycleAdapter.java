@@ -8,22 +8,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
-
-import java.util.ArrayList;
 import java.util.List;
 
+//recycler adapter for displaying artwork in the game info page
 public class ArtworkRecycleAdapter extends RecyclerView.Adapter<ArtworkRecycleAdapter.ArtworkViewHolder> {
-    private List<String> mUrls = new ArrayList<>();
+    private List<String> mUrls;
     private Context mContext;
-    private List<BrowseResultsTable> titles;
+    //constructor takes two arguments; an arraylist of urls for the images, and the application context
     public ArtworkRecycleAdapter(List<String> urls, Context context) {
         mUrls = urls;
         mContext = context;
     }
-
     @NonNull
     @Override
     public ArtworkViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -32,9 +29,9 @@ public class ArtworkRecycleAdapter extends RecyclerView.Adapter<ArtworkRecycleAd
         return holder;
     }
 
-
     @Override
     public void onBindViewHolder(@NonNull ArtworkViewHolder holder, final int position) {
+        //use the Glide package to retrieve image based on the url at the given view position
         Glide.with(mContext)
                 .asBitmap()
                 .load(mUrls.get(position))

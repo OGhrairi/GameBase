@@ -14,8 +14,7 @@
         <activity android:name=".GameInfoActivity"></activity>
         <activity android:name=".WebViewActivity"
             android:configChanges="orientation|screenSize"/>
-        <activity android:name=".SettingsActivity"
-            android:parentActivityName=".HomeActivity"/>
+
         <activity android:name=".BrowseActivity"
             android:parentActivityName=".HomeActivity"/>
         <activity android:name=".NewsFeedActivity"

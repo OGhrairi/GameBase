@@ -2,14 +2,11 @@ package com.example.gamebase;
 
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +16,10 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
-import android.widget.TextView;
-
 import java.util.ArrayList;
 import java.util.List;
 
-
+//fragment that handles the search filter on a tablet, inflating on page instead of into a dialog
 public class FilterTabFragment extends Fragment {
     public class gameCombo {
         private int id;
@@ -56,13 +50,6 @@ public class FilterTabFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        final getter g = new getter();
-        g.execute();
-    }
-
-    @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
@@ -70,8 +57,11 @@ public class FilterTabFragment extends Fragment {
         autoPlatform = view.findViewById(R.id.platformSelector);
         autoGenre = view.findViewById(R.id.genreSelector);
         ImageButton clearButton = view.findViewById(R.id.clearButton);
+        //when on the page, clear button is not necessary, the cancel button takes its role
         clearButton.setVisibility(View.INVISIBLE);
         Button cancelButton = view.findViewById(R.id.filterCancel);
+        //cancel button has different text based on its context, either 'clear' or 'cancel'
+        //depending on whether it's on the page or in a dialog
         cancelButton.setText("Clear");
         final EditText yr1 = view.findViewById(R.id.filterYearFrom);
         final EditText yr2 = view.findViewById(R.id.filterYearTo);
@@ -90,6 +80,7 @@ public class FilterTabFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Activity a = getActivity();
+                //apply filters to the activity variable
                 if(a instanceof SearchActivity){
                     AutoCompleteTextView platform = view.findViewById(R.id.platformSelector);
                     AutoCompleteTextView genre = view.findViewById(R.id.genreSelector);
@@ -112,6 +103,13 @@ public class FilterTabFragment extends Fragment {
 
 
         return view;
+    }
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //call asynctask to populate genre and platform autocompletes
+        final getter g = new getter();
+        g.execute();
     }
     public class getter extends AsyncTask<Void,Void,Void>{
 

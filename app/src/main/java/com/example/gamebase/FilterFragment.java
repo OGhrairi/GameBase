@@ -3,12 +3,10 @@ package com.example.gamebase;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +15,11 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
-
 import java.util.ArrayList;
 import java.util.List;
 
-
+//fragment which handles the search filter layout specifically for the phone version,
+//since the tablet version does not inflate it into a dialog, but instead places it on the page
 public class FilterFragment extends DialogFragment {
 
     List<PlatformTable> platform  = new ArrayList<>();
@@ -38,8 +35,6 @@ public class FilterFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-
-
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = requireActivity().getLayoutInflater();
@@ -52,24 +47,24 @@ public class FilterFragment extends DialogFragment {
         final EditText yr2 = view.findViewById(R.id.filterYearTo);
         final AutoCompleteTextView platform = view.findViewById(R.id.platformSelector);
         final AutoCompleteTextView genre = view.findViewById(R.id.genreSelector);
+        //if filters were previously set, this bundle passes the values back to this dialog
         Bundle bundle = this.getArguments();
         if(!bundle.isEmpty()) {
             int y1 = bundle.getInt("y1",0);
             int y2 = bundle.getInt("y2",0);
-           // yr1.setText(bundle.getInt("y1", 0));
             if(y1 != 0)yr1.setText(Integer.toString(y1));
             if(y2 != 0)yr2.setText(Integer.toString(y2));
-           // yr2.setText(bundle.getInt("y2", 0));
             platform.setText(bundle.getString("platform", ""));
             genre.setText(bundle.getString("genre", ""));
-        }else System.out.println("bundle is empty");
+        }
+        //retrieve genre and platform lists from the local db to populate autoCompleteTextViews
         getter g = new getter();
         g.execute();
 
+        //button to clear all fields in the filter
         clearButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 yr1.setText("");
                 yr2.setText("");
                 platform.setText("");
@@ -78,6 +73,7 @@ public class FilterFragment extends DialogFragment {
             }
         });
 
+        //button to dismiss the filter dialog
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,11 +81,14 @@ public class FilterFragment extends DialogFragment {
             }
         });
 
+        //button to apply set filters
         Button applyButton = view.findViewById(R.id.filterApply);
         applyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 Activity a = getActivity();
+                //this part passes the filters that were entered in the dialog to the filter
+                //variables in the parent activity
                 if(a instanceof SearchActivity){
                     if(!TextUtils.isEmpty(platform.getText().toString())) {
                         ((SearchActivity) a).setPlatformFilter(autoPlatform.getText().toString());
@@ -111,6 +110,8 @@ public class FilterFragment extends DialogFragment {
 
         return builder.create();
     }
+
+    //asynctask for retrieving genres and platforms
     public class getter extends AsyncTask<Void,Void,Void>{
 
         @Override
@@ -123,7 +124,7 @@ public class FilterFragment extends DialogFragment {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
+            //add platforms and genres to their own array, bind the arrays to the autoCompleteTextViews
             for(int i=0; i<platform.size();i++){
                 platformList.add(platform.get(i).getName());
             }

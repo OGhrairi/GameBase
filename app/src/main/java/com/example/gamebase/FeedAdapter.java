@@ -7,21 +7,21 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
 
-//Main class, extends the ViewHolder adapter defined below
+//recyclerview adapter for use in the news feed page, displays an article on each element
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder> {
     private List<String> mTitles = new ArrayList<>();
     private List<String> mBodies = new ArrayList<>();
     private List<String> mImages = new ArrayList<>();
     private List<String> mUrls = new ArrayList<>();
     private Context mContext;
-    //Constructor for recyclerview
+    //Constructor for recyclerview, takes 5 args; an array of titles, and array of image urls, an array of
+    //article descriptions, and array of article urls and the activity context
     public FeedAdapter(List<String> titles, List<String> images, List<String> bodies, List<String> Urls, Context context){
         mTitles = titles;
         mBodies = bodies;
@@ -52,6 +52,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
         //set the text values for the view from their respective input arrays
         holder.title.setText(mTitles.get(position));
         holder.body.setText(mBodies.get(position));
+        //set the onClick listener to open the article url in a webView when one is pressed
         holder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,7 +85,5 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.FeedViewHolder
             parentLayout = view.findViewById(R.id.feedBrowseLayout);
         }
     }
-    public interface FeedListener{
-        void webOpener(int position);
-    }
+
 }

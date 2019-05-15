@@ -5,17 +5,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 
-//adapter for recyclerview
+//adapter for game list recyclerview, used in top 50 page and in search page
 public class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.BrowseViewHolder> {
     private String[] list;
     private List<BrowseResultsTable> titles;
     private OnBrowseListener mOnBrowseListener;
+    //takes two args; an array of titles and a listener for onClick handling
     public BrowseAdapter(String[] inList, OnBrowseListener OnBrowseListener){
         list=inList;
         this.mOnBrowseListener = OnBrowseListener;
@@ -61,6 +61,8 @@ public class BrowseAdapter extends RecyclerView.Adapter<BrowseAdapter.BrowseView
         this.titles = newData;
         notifyDataSetChanged();
     }
+    //interface that is called by this adapter when an item is tapped, and implemented by
+    //whichever activity it is on
     public interface OnBrowseListener{
         void onBrowseClick(int position);
     }
